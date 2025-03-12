@@ -17,13 +17,26 @@ def generate_sql(input_prompt):
         outputs = model.generate(**inputs, max_length=512)
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/main", methods=["GET", "POST"])
 def home():
     generated_sql = ""
     if request.method == "POST":
         user_input = request.form.get("text_input")
         if user_input:
             generated_sql = generate_sql(user_input)
+    
+    return render_template("main.html", output_text=generated_sql)
+
+@app.route("/", methods=["GET", "POST"])  
+def index():
+    generated_sql = ""
+    if request.method == "POST":
+        schema_input = request.form.get("schema_input")
+        query_input = request.form.get("query_input")
+
+        if schema_input and query_input:
+            combined_input = f"Schema: {schema_input} | Query: {query_input}"
+            generated_sql = generate_sql(combined_input)  # Pass combined input
     
     return render_template("index.html", output_text=generated_sql)
 

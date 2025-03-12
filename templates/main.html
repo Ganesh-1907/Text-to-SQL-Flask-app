@@ -52,16 +52,10 @@
     <div class="container">
         <h2>SQL Query Generator</h2>
         <form method="post">
-            <label><strong>Database Schema:</strong></label>
-            <textarea name="schema_input" placeholder="Enter your database schema..." rows="4" required></textarea>
-
-            <label><strong>Natural Language Query:</strong></label>
-            <textarea name="query_input" placeholder="Enter your query in natural language..." rows="3" required></textarea>
-            
+            <textarea name="text_input" placeholder="Enter natural language query..." rows="4" cols="50" required></textarea>
             <br>
             <button class="btn" type="submit">Generate SQL</button>
         </form>
-
         {% if output_text %}
             <p><strong>Generated SQL:</strong></p>
             <pre>{{ output_text }}</pre>
