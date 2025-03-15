@@ -35,9 +35,16 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            margin-right: 10px;
         }
         .btn:hover {
             background-color: #0056b3;
+        }
+        .btn-clear {
+            background-color: #dc3545;
+        }
+        .btn-clear:hover {
+            background-color: #a71d2a;
         }
         pre {
             background: #eee;
@@ -53,19 +60,32 @@
         <h2>SQL Query Generator</h2>
         <form method="post">
             <label><strong>Database Schema:</strong></label>
-            <textarea name="schema_input" placeholder="Enter your database schema..." rows="4" required></textarea>
+            <textarea name="schema_input" id="schema_input" placeholder="Enter your database schema..." rows="4" required>{{ request.form['schema_input'] if 'schema_input' in request.form else '' }}</textarea>
 
             <label><strong>Natural Language Query:</strong></label>
-            <textarea name="query_input" placeholder="Enter your query in natural language..." rows="3" required></textarea>
+            <textarea name="query_input" id="query_input" placeholder="Enter your query in natural language..." rows="3" required>{{ request.form['query_input'] if 'query_input' in request.form else '' }}</textarea>
             
             <br>
             <button class="btn" type="submit">Generate SQL</button>
+            <button class="btn btn-clear" type="button" onclick="clearFields()">Clear</button>
         </form>
 
         {% if output_text %}
             <p><strong>Generated SQL:</strong></p>
-            <pre>{{ output_text }}</pre>
+            <pre id="output_text">{{ output_text }}</pre>
         {% endif %}
     </div>
+
+    <script>
+        function clearFields() {
+            document.getElementById('schema_input').value = '';
+            document.getElementById('query_input').value = '';
+            document.getElementById('output_text').innerText = '';
+
+            setTimeout(() => {
+        window.location.href = window.location.pathname;
+    }, 100); 
+        }
+    </script>
 </body>
 </html>
