@@ -96,8 +96,23 @@ def generate_sql(query):
         outputs = model.generate(**inputs, max_length=512)
     
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    print(f"Generated SQL: {generated_text}")  # Debugging
+    print(f"Generated SQL: {generated_text}")  
     return generated_text
+
+
+
+@app.route("/generate-sql", methods=["POST"])
+def generate_sql_route():
+    data = request.json  # Read JSON data from frontend
+    query_input = data.get("query_input", "")
+
+    if query_input:
+        generated_sql = generate_sql(query_input)
+        return jsonify({"generated_sql": generated_sql})
+
+    return jsonify({"error": "Invalid input"}), 400
+
+##for frontend within flask
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -110,16 +125,6 @@ def index():
     
     return render_template("index.html", output_text=generated_sql)
 
-@app.route("/generate-sql", methods=["POST"])
-def generate_sql_route():
-    data = request.json  # Read JSON data from frontend
-    query_input = data.get("query_input", "")
-
-    if query_input:
-        generated_sql = generate_sql(query_input)
-        return jsonify({"generated_sql": generated_sql})
-
-    return jsonify({"error": "Invalid input"}), 400
 
 if __name__ == "__main__":
     app.run(debug=True)
